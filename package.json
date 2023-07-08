@@ -1,0 +1,22 @@
+{
+  "name": "serverdocker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "async-redis": "^2.0.0",
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "mysql": "^2.18.1",
+    "node-cron": "^3.0.2",
+    "redis": "^4.6.5",
+    "socket.io": "^4.5.4"
+  }
+}

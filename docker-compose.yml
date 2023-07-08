@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: node-mysql-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db2
+      - rabbitmq
+    environment:
+      DB_HOST: db2
+      DB_USER: root
+      DB_PASSWORD: my-secret-pw
+      DB_NAME: kopikayumaschat
+      DB_PORT: 3306
+      # RABBITMQ_URL: amqp://rabbitmq
+    stdin_open: true
+    tty: true
+
+  db2:
+    image: "mysql:8.0"
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: kopikayumaschat
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - dbdata:/var/lib/mysql
+      # - ./config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db2
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: my-secret-pw
+    ports:
+      - "8090:80"
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  dbdata:
+
+networks:
+  app-network:

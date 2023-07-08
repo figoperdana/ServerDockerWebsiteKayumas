@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: serverdocker-db
+      DB_USER: root
+      DB_PASS: my-secret-pw
+      DB_NAME: kopikayumaschat
+    depends_on:
+      - serverdocker-db
+      - rabbitmq
+
+  serverdocker-db:
+    image: mysql:8.0
+    container_name: serverdocker-db
+    environment:
+      MYSQL_DATABASE: kopikayumaschat
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: serverdocker-db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: my-secret-pw
+    ports:
+      - "8090:80"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
